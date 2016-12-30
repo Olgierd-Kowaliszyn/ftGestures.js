@@ -1,9 +1,14 @@
 ftg = ftGestures = {};
+ftg.mustDraw = false;
 
 ftg.create = function(_object, _data, _callBack, _developerField){
   
   ftg.target = _object;
-  ftg.context = ftg.target.getContext("2d");
+  if(ftg.target.tagName == "CANVAS"){
+    ftg.context = ftg.target.getContext("2d");
+  }else{
+    ftg.context = null;
+  }
   
   ftg.dataString = _data;
   ftg.developerField = _developerField || null;
@@ -22,8 +27,10 @@ ftg.create = function(_object, _data, _callBack, _developerField){
     var _touches = _event.targetTouches;
     var _item = _touches.item(0);
     
-    ftg.context.clearRect(0, 0, ftg.target.width, ftg.target.height);
-    ftg.target.width = ftg.target.width;
+    if(ftg.context != null && ( ftg.developerField != null || ftg.mustDraw == true )){
+      ftg.context.clearRect(0, 0, ftg.target.width, ftg.target.height);
+      ftg.target.width = ftg.target.width;
+    }
     
     ftg.startPoint = {x: _item.clientX, y: _item.clientY};
     ftg.lastPoint = {x: _item.clientX, y: _item.clientY};
@@ -57,10 +64,12 @@ ftg.create = function(_object, _data, _callBack, _developerField){
         ftg.developerField.innerHTML = totalDeg + "<br>";
       }
       
-      ftg.context.strokeStyle="#005500";
-      ftg.context.moveTo(_item.clientX, _item.clientY);
-      ftg.context.lineTo(_item.clientX+1, _item.clientY);
-      ftg.context.stroke();
+      if(ftg.context != null && ( ftg.developerField != null || ftg.mustDraw == true )){
+        ftg.context.strokeStyle="#005500";
+        ftg.context.moveTo(_item.clientX, _item.clientY);
+        ftg.context.lineTo(_item.clientX+1, _item.clientY);
+        ftg.context.stroke();
+      }
       
       var distance = Math.sqrt(Math.pow(_item.clientX - ftg.lastPosition.x, 2) + Math.pow(_item.clientY - ftg.lastPosition.y, 2));
       
@@ -73,8 +82,11 @@ ftg.create = function(_object, _data, _callBack, _developerField){
       
       if(Math.abs(lastDeg - totalDeg) > 30){
         
-        //ftg.context.moveTo(0, _item.clientY);
-        //ftg.context.lineTo(ftg.target.width, _item.clientY);
+        /*if(ftg.context != null && ( ftg.developerField != null || ftg.mustDraw == true )){
+          ftg.context.moveTo(0, _item.clientY);
+          ftg.context.lineTo(ftg.target.width, _item.clientY);
+        }*/
+        
         ftg.lastPoint.x = _item.clientX;
         ftg.lastPoint.y = _item.clientY;
         distance = 0;
