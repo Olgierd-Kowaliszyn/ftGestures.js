@@ -1,0 +1,106 @@
+<html>
+  
+  <head>
+    
+    <title></title>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
+    <style>
+      
+      *{
+        
+        box-sizing: inner-box;
+        padding: 0px;
+        margin: 0px;
+        
+      }
+      
+      #infoField{
+        
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        z-index: 500000;
+        font-size: 5vw;
+        
+      }
+      
+      #container{
+        
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        
+      }
+      
+    </style>
+    
+    <script src="kiwi.js" ></script>
+    
+    <script src="ftMagicFunctions.js" ></script>
+    <script src="ftGestures.js" ></script>
+    
+    <script>
+
+      window.addEventListener("load", create);
+      
+      var startData, names;
+      
+      function create(){
+
+        var _container = __byId("container");
+        var _infoField = __byId("infoField");
+        
+        _infoField.innerHTML = "Start drawing!";
+
+        startData = '[[{"deg": 45},{"deg": 135},{"deg": -135},{"deg": -45}], [{"deg": 90},{"deg": 180},{"deg": -90},{"deg": 0}], [{"deg": 90}], [{"deg": 90},{"deg": 180},{"deg": -90},{"deg": 0},{"deg": 90, "after": 4},{"deg": 180, "after": 4},{"deg": -90, "after": 4},{"deg": 0, "after": 4}]]';
+        names = ["diamond", "square", "line up", "double square"];
+        
+        ftg.create(_container, startData, wchithShape);
+          
+      }
+      
+      function wchithShape(_results){
+
+        var _infoField = __byId("infoField");
+        
+        var shapeNumber = null;
+        var shapeValue = 0;
+        
+        for(var i = 0; i < _results.length; i++){
+        
+          if(_results[i] > 60 && shapeValue < _results[i]){
+          
+            shapeValue = _results[i];
+            shapeNumber = i;
+            
+          }
+          
+        }
+        
+        if(shapeNumber == null){
+          
+          _infoField.innerHTML = "None of shapes";
+          
+        }else{
+          
+          _infoField.innerHTML = "<p>" + names[shapeNumber];
+           
+        }
+
+      }
+
+    </script>
+    
+  </head>
+  
+  <body>
+    
+    <div id="container"> 
+      <div id="infoField" ></div> 
+    </div> 
+    
+  </body>
+  
+</html>
